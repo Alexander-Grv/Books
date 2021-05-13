@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -80,10 +82,22 @@ public class BooksAppApplication {
 				try {
 					List<Book> books = mapper.readValue(inputStream, typeReference);
 					bookService.save(books);
+					books.sort((o1, o2) -> o1.getYear() - o2.getYear());
+					System.out.println("\nSorted list by year:");
+					for (Book book : books) {
+						System.out.println("Book: "
+								+ "id: (" + book.getId() + ")"
+								+ " name: (" + book.getName() + ")"
+								+ " topic: (" + book.getTopic() + ")"
+								+ " isdn: (" + book.getIsbn() + ")"
+								+ " year: (" + book.getYear() + ")");
+					}
 					System.out.println("Books Saved!");
+
 				} catch (IOException e) {
 					System.out.println("Unable to save books: " + e.getMessage());
 				}
+
 			}
 		};
 	}
